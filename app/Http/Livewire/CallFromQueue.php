@@ -10,13 +10,14 @@ class CallFromQueue extends Component
     public function Call()
     {
         $connect = $this->connect();
-        $connect->calls->create(
-            "+12762965123",
-            "+2348063146940",
-            ["url" => "https://handler.twilio.com/twiml/EH2ff0457fe3b6eb226e48a3091d00e8c5"]
+
+        $result = $connect->calls->create(
+            "+16206440753", //twilio line from
+            "+2348063146940", //my line to
+            ["url" => "https://handler.twilio.com/twiml/EH42abf347600cb39843a71d572b4411eb"]
         );
 
-        // print $call->sid;
+        dd($result->sid);
     }
 
     public function connect()
