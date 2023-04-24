@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CallCenterController;
 use Illuminate\Support\Facades\Route;
 
+
+use Twilio\TwiML\VoiceResponse;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +32,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::post('/incoming-call', [CallCenterController::class, 'handleIncomingCall']);
-
 require __DIR__ . '/auth.php';
+
+
+// Route::any('/incoming-call', [CallCenterController::class, 'handleIncomingCall']);
+Route::any('/incoming-call', function () {
+    try {
+        $response = new VoiceResponse();
+        $response->say('hello world');
+        return $response;
+    } catch (TwimlException $e) {
+        return $e->getCode();
+    }
+});
