@@ -15,18 +15,38 @@ class CallCenterController extends Controller
 
         try {
 
+            // if (!app(CallFromQueue::class)->agentAvailable) {
+            //     $response->say('I\'m sorry, our agent is currently unavailable. Please try again later.');
+            //     return $response;
+            // }
             $response = new VoiceResponse();
-            if (!app(CallFromQueue::class)->agentAvailable) {
-                $response->say('I\'m sorry, our agent is currently unavailable. Please try again later.');
-                return $response;
-            }
+            $response->say('Thanks for reaching out. You have been added to a queue. An agent will get to you shortly');
+            $response->enqueue('support', ['url' => 'about_to_connect.xml']);
 
-            $dial = $response->dial();
-            $dial->conference('Call Center Conference');
+            //notify agent of call
 
-            return $response;
+            // make the call to your agent
+            $client = new Client(getenv("TWILIO_ACCOUNT_SID"), getenv("TWILIO_AUTH_TOKEN"));
+
+            $call = $client->calls->create(
+                +2348063146940,
+                +16206440753,
+                ['url' => 'https://26bd-102-91-4-161.ngrok-free.app/call-forward'] //
+            );
+
+            return response($response)->header('Content-Type', 'text/xml');
         } catch (TwimlException $e) {
             return $e->getCode();
         }
+    }
+
+    public function agentConnectUser()
+    {
+        // $token = csrf_token();
+        $response = new VoiceResponse();
+        $dial = $response->dial();
+        $dial->queue('support');
+
+        echo $response;
     }
 }

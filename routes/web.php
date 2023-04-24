@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CallCenterController;
+use App\Http\Livewire\CallFromQueue;
 use Illuminate\Support\Facades\Route;
 
 
@@ -35,13 +36,5 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-// Route::any('/incoming-call', [CallCenterController::class, 'handleIncomingCall']);
-Route::any('/incoming-call', function () {
-    try {
-        $response = new VoiceResponse();
-        $response->say('hello world');
-        return $response;
-    } catch (TwimlException $e) {
-        return $e->getCode();
-    }
-});
+Route::any('/call', [CallFromQueue::class, 'handleIncomingCall']);
+Route::any('/call-forward', [CallFromQueue::class, 'callFromQueue']);
