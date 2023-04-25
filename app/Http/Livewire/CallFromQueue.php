@@ -22,14 +22,16 @@ class CallFromQueue extends Component
         try {
 
             if (!$this->agentAvailable) {
+                $response = new VoiceResponse();
                 $response->say('I\'m sorry, our agent is currently unavailable. Please try again later.');
-                return $response;
+                return $response->hangup();
             }
 
             $response = new VoiceResponse();
             $response->say('Thanks for reaching out. You have been added to a queue. An agent will get to you shortly');
             $response->enqueue('support', ['url' => 'about_to_connect.xml']);
 
+            //notify agent of call
             return response($response)->header('Content-Type', 'text/xml');
         } catch (TwimlException $e) {
             return $e->getCode();
@@ -45,7 +47,7 @@ class CallFromQueue extends Component
         $call = $client->calls->create(
             +2348063146940,
             +16206440753,
-            ['url' => 'https://26bd-102-91-4-161.ngrok-free.app/call-forward'] //
+            ['url' => 'https://26bd-102-91-4-161.ngrok-free.app/call-forward']
         );
 
         $this->notifyAgent = false;
@@ -62,7 +64,6 @@ class CallFromQueue extends Component
     public function callFromQueue()
     {
         try {
-            // $token = csrf_token();
             $response = new VoiceResponse();
             $dial = $response->dial();
             $dial->queue('support');
