@@ -29,8 +29,8 @@ class CallCenterController extends Controller
             $client = new Client(getenv("TWILIO_ACCOUNT_SID"), getenv("TWILIO_AUTH_TOKEN"));
 
             $call = $client->calls->create(
-                +2348063146940,
-                +16206440753,
+                +234XXXXXXXXXXX,
+                +16XXXXXXXXXXXX,
                 ['url' => 'https://26bd-102-91-4-161.ngrok-free.app/call-forward'] //
             );
 
