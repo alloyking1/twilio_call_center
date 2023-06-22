@@ -45,12 +45,10 @@ class CallFromQueue extends Component
 
         //agent phone rings
         $call = $client->calls->create(
-            +2348063146940,
-            +16206440753,
+            +234XXXXXXXXX,
+            +16XXXXXXXXXX,
             ['url' => 'https://26bd-102-91-4-161.ngrok-free.app/call-forward']
         );
-
-        $this->notifyAgent = false;
     }
 
     public function agentEndCall()
